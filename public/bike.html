@@ -1,0 +1,110 @@
+<html>
+<head>
+  <meta charset=utf-8 />
+  <title>Simple FeatureLayer</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+  <!-- Load Leaflet from CDN-->
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+  <!-- Load Esri Leaflet from CDN -->
+  <script src="http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"></script>
+
+  <style>
+    body {margin:0;padding:0;}
+    #map {position: absolute;top:0;bottom:0;right:0;left:0;}
+  </style>
+</head>
+<body>
+
+<div id="map"></div>
+
+<script>
+  var map = L.map('map').setView([45.526, -122.667], 2);
+
+  L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+ 
+
+
+	var popup = L.popup();
+	
+	function onMapClick(e) {
+
+		popup
+			.setLatLng(e.latlng)
+			.setContent('you clicked the map at ' + e.latlng.toString())
+			.openOn(map);
+
+	}
+	
+	map.on('click', onMapClick);
+	
+  // console.log(arr.length)
+  // console.log(arr[1]);
+  // var marker = L.marker([51.5, -0.09]).addTo(map);
+  // for(var i=0;i<arr.length;i++){
+  //   console.log(arr[i].lat);
+  //   L.marker(arr[i].lat,arr[i].lon).addTo(map);
+  // }
+
+
+function get_xmlhttp()
+{
+    var xmlhttp; 
+    if(window.XMLHttpRequest) 
+    {
+   	xmlhttp = new XMLHttpRequest();
+    } 
+    else 
+    {
+   	xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    return xmlhttp;
+}
+var xmlhttp = get_xmlhttp();
+var fetch_location = 'http://10.17.135.167:4567/availability?x=37.7631410000&y=-122.4811240000';
+xmlhttp.open("GET",fetch_location,true); xmlhttp.send();
+xmlhttp.onreadystatechange=function()
+{
+    if (xmlhttp.readyState==4)
+    {
+	if (xmlhttp.status==200)
+	{
+	    data = xmlhttp.responseText;
+	    //planes = JSON.parse(data);
+	    planes = JSON.parse(data);
+	    final_array = [];
+	    for(var i = 1; i<= 5; i++) {
+		var arr = [planes[i].ava.toString(), parseFloat(planes[i].x), parseFloat(planes[i].y)];
+		final_array.push(arr);
+	    }
+	    console.log(final_array);
+	    // var planes = [
+	    // 	["7C6B07",37.763789,-122.475693],
+	    // 	["7C6B38",-41.30269,173.63696],
+	    // 	["7C6CA1",-41.49413,173.5421],
+	    // 	["7C6CA2",-40.98585,174.50659],
+	    // 	["C81D9D",-40.93163,173.81726],
+	    // 	["C82009",-41.5183,174.78081],
+	    // 	["C82081",-41.42079,173.5783],
+	    // 	["C820AB",-42.08414,173.96632],
+	    // 	["C820B6",-41.51285,173.53274]
+	    // ];
+
+	    planes = final_array;
+    for (var i = 0; i < planes.length; i++) {
+	console.log(planes[i]);
+	//marker = new L.marker([planes[i][1],planes[i][2]]).addTo(map);
+	marker = new L.marker([planes[i][1],planes[i][2]]).addTo(map).bindPopup(planes[i][0]).openPopup();
+    }
+	    console.log(data);
+	    //a = JSON.parse(data);
+	}
+    }
+}
+</script>
+
+</body>
+</html>
