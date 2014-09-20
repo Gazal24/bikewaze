@@ -1,0 +1,20 @@
+# myapp.rb
+require 'sinatra'
+require 'active_record'
+
+class Article < ActiveRecord::Base
+end
+
+get '/' do
+  ActiveRecord::Base.establish_connection(
+                                          :adapter  => "mysql2",
+                                          :host     => "localhost",
+                                          :username => "root",
+                                          :password => "root",
+                                          :database => "bikewaze"
+                                          )
+  Article.first.title  
+
+end
+
+
