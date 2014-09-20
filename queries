@@ -1,3 +1,12 @@
 CREATE TABLE bikeparks(id INT PRIMARY KEY AUTO_INCREMENT, x DECIMAL(16,14), y DECIMAL(16,14), capacity INT)
 
 insert into bikeparks (x, y , capacity) values(12.01201, 13.192912, 5);
+
+
+
+http://localhost:4567/checkin?user=101&x=12.5&y=3.2&available=1
+
+http://localhost:4567/availability?x=12.213&y=51.01
+
+http://localhost:4567/newbikepark?x=12.43&y=18.12&capacity=20
+
