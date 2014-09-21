@@ -40,7 +40,7 @@ get '/checkin' do
   @bike_park_id = 1 #Bikepark.find() // Algo Load (@x, @y)
   @nearest_bike =  get_nearest_bike_park(@x, @y)
   if !@nearest_bike.blank?
-    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now)
+    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now, :type = 1)
     a.save
   else
     body "No nearby locaiton found."
@@ -57,7 +57,7 @@ get '/checkout' do
   @bike_park_id = 1 #Bikepark.find() // Algo Load (@x, @y)
   @nearest_bike =  get_nearest_bike_park(@x, @y)
   if !@nearest_bike.blank?
-    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now)
+    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now, :type = 0)
     a.save
   else
     body "No nearby locaiton found."
@@ -74,7 +74,14 @@ get '/availability' do
   @nearest_5_hash = {} 
   counter = 1
   @nearest_5_bp.each {|k,v|
-    ava = 
+    bpstatus = Bikeparkstatus.where(:bike_park_id => k.id).order(:time).reverse_order
+    if (bpstatus.first.available == -1)
+      available = Bikeparkstatus.where(:bike_park_id => k.id, :time > Time.now - 10.hours).order(:time).reverse_order
+    else 
+      available = bpstatus.first.available
+    end
+    puts xx.length
+    puts "**********************"
     @nearest_5_hash[counter] = {'x' => k.x, 'y' => k.y, 'ava' => k.capacity}
     counter = counter + 1
   }
@@ -137,5 +144,5 @@ def distance a, b
   c = 2 * Math::atan2(Math::sqrt(a), Math::sqrt(1-a))
 
   d = rm * c # Delta in meters
-  return (d < 500 ? d : -1)
+  return (d < 1000 ? d : -1)
 end
