@@ -34,6 +34,7 @@
 </div>
 
 <script>
+var base_url = "http://10.17.135.167:4567/"
     var map = L.map('map').setView([45.526, -122.667],13);
 
 L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -120,13 +121,13 @@ function showPosition(position) {
 }
 
 function checkin(available){
-    flag = true;x
+    flag = true;
     if(available != -1){
 	set_msg("Thank you for checking in and updating availability");
 	flag = false;
     }
     var xmlhttp = get_xmlhttp();
-    var fetch_location = 'http://10.17.135.167:4567/checkin?user=101&x='+current_lat+'&y='+current_lng+'&available='+available;
+    var fetch_location = base_url+'checkin?user=101&x='+current_lat+'&y='+current_lng+'&available='+available;
     xmlhttp.open("GET",fetch_location,true); xmlhttp.send();
     xmlhttp.onreadystatechange=function()
     {
@@ -141,13 +142,30 @@ function checkin(available){
     }
 }
 
+function checkout(){
+    var xmlhttp = get_xmlhttp();
+    var fetch_location = base_url+'checkout?user=101&x='+current_lat+'&y='+current_lng;
+    xmlhttp.open("GET",fetch_location,true); xmlhttp.send();
+    xmlhttp.onreadystatechange=function()
+    {
+	if (xmlhttp.readyState==4)
+	{
+	    if (xmlhttp.status==200)
+	    {
+		set_msg("You checked out from here.!");
+		data = xmlhttp.responseText;
+	    }
+	}
+    }
+}
+
 function set_msg(str){
 		   document.getElementById("message").innerHTML = str;
 		   }
 
 function find_parking(){
     var xmlhttp = get_xmlhttp();
-    var fetch_location = 'http://10.17.135.167:4567/availability?x='+current_lat+'&y='+current_lng;
+    var fetch_location = base_url+'availability?x='+current_lat+'&y='+current_lng;
     xmlhttp.open("GET",fetch_location,true); xmlhttp.send();
     xmlhttp.onreadystatechange=function()
     {

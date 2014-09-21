@@ -40,7 +40,7 @@ get '/checkin' do
   @bike_park_id = 1 #Bikepark.find() // Algo Load (@x, @y)
   @nearest_bike =  get_nearest_bike_park(@x, @y)
   if !@nearest_bike.blank?
-    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now, :type = 1)
+    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now, :type_id => 1)
     a.save
   else
     body "No nearby locaiton found."
@@ -53,11 +53,11 @@ get '/checkout' do
   @user = params[:user]
   @x = params[:x]
   @y = params[:y]
-  @available = params[:available]
+  @available = -1
   @bike_park_id = 1 #Bikepark.find() // Algo Load (@x, @y)
   @nearest_bike =  get_nearest_bike_park(@x, @y)
   if !@nearest_bike.blank?
-    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now, :type = 0)
+    a = Bikeparkstatus.new(:user_id => @user, :bike_park_id => @nearest_bike.id, :available => @available, :time => Time.now, :type_id => 0)
     a.save
   else
     body "No nearby locaiton found."
@@ -73,16 +73,16 @@ get '/availability' do
   @nearest_5_bp =  get_5_nearby_bike_park(@x, @y)
   @nearest_5_hash = {} 
   counter = 1
+  available = 2
   @nearest_5_bp.each {|k,v|
     bpstatus = Bikeparkstatus.where(:bike_park_id => k.id).order(:time).reverse_order
-    if (bpstatus.first.available == -1)
-      available = Bikeparkstatus.where(:bike_park_id => k.id, :time > Time.now - 10.hours).order(:time).reverse_order
+    puts bpstatus.empty?
+    if(bpstatus.empty? or bpstatus.first.available == -1)
+      available = k.capacity
     else 
       available = bpstatus.first.available
     end
-    puts xx.length
-    puts "**********************"
-    @nearest_5_hash[counter] = {'x' => k.x, 'y' => k.y, 'ava' => k.capacity}
+    @nearest_5_hash[counter] = {'x' => k.x, 'y' => k.y, 'ava' => available}
     counter = counter + 1
   }
   @json = JSON.generate(@nearest_5_hash)
