@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta charset=utf-8 />
-  <title>Simple FeatureLayer</title>
+  <title>Bike Ram</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
 
   <!-- Load Leaflet from CDN-->
@@ -20,14 +20,14 @@
 
 <div id="map" >
 </div>
-<b><font color="green"><div id="message" align="center">FIND</div></font></b>
+<b><font color="green"><div id="message" align="center"></div></font></b>
 <div align="center">
-    <button id="find_parking" onclick="current()"> Current
+    <button id="find_parking" onclick="current()"> Home
     <button id="find_parking" onclick="find_parking()"> Find Parking
-    <button id="checkin" onclick="checkin(-1)"> CheckIN
-    <button id="checkout" onclick="checkout()"> CheckOUT
+    <button id="checkin" onclick="checkin(-1)"> Check In
+    <button id="checkout" onclick="checkout()"> Check Out
 </div>
-<div align="center"><b> Report Availability</b>
+<div align="center"><b> Report Availability: </b>
     <button id="1" onclick="checkin(1)"> 1-2
     <button id="2" onclick="checkin(3)"> 3-5
     <button id="3" onclick="checkin(6)"> 6+
