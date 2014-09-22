@@ -48,7 +48,7 @@ var current_lat;
 function onMapClick(e) {
     popup
 	.setLatLng(e.latlng)
-	.setContent('you clicked the map at ' + e.latlng.toString())
+	.setContent('You are here!')
 	.openOn(map);
     console.log(e);
     current_lng = e.latlng.lng;
@@ -135,7 +135,7 @@ function checkin(available){
 	{
 	    if (xmlhttp.status==200)
 	    {
-		if(flag) set_msg("You checked in here.!");
+		if(flag) set_msg("You checked in here.");
 		data = xmlhttp.responseText;
 	    }
 	}
@@ -152,7 +152,7 @@ function checkout(){
 	{
 	    if (xmlhttp.status==200)
 	    {
-		set_msg("You checked out from here.!");
+		set_msg("You checked out from here.");
 		data = xmlhttp.responseText;
 	    }
 	}
